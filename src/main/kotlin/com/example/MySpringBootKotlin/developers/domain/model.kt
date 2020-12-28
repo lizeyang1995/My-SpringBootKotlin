@@ -9,7 +9,7 @@ typealias PasswordEncoder = (String) -> String
 
 data class Developer(
         val username: String,
-        val email: String,
+        val email: String?,
         val password: String,
         val id: UUID? = null
 )
