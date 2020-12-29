@@ -16,6 +16,8 @@ repositories {
 	mavenCentral()
 }
 
+val arrow_version = "0.8.2"
+
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -27,6 +29,9 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
+	implementation ("io.arrow-kt:arrow-core:$arrow_version")
+	implementation ("io.arrow-kt:arrow-instances-core:$arrow_version")
 }
 
 tasks.withType<KotlinCompile> {
