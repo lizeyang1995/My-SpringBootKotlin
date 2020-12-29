@@ -1,0 +1,41 @@
+package com.example.MySpringBootKotlin.security
+
+import com.example.MySpringBootKotlin.common.TryLogger
+import io.jsonwebtoken.Jwts
+import org.springframework.stereotype.Component
+import io.jsonwebtoken.SignatureAlgorithm
+import java.util.*
+import java.util.concurrent.TimeUnit
+
+@Component
+class TokenHelper {
+    companion object {
+        private const val SECRET_TOKEN = "*top*secret*key"
+        private val SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512
+        private val EXPIRES_IN_TEN_MINUTES = TimeUnit.MINUTES.toMillis(10)
+    }
+
+    fun generateToken(username: String): String =
+            Jwts.builder()
+                    .setSubject(username)
+                    .setIssuedAt(now())
+                    .setExpiration(getExpirationDate())
+                    .signWith(SIGNATURE_ALGORITHM, SECRET_TOKEN)
+                    .compact()
+
+    fun isValidToken(token: String): Boolean = TryLogger {
+        Jwts.parser()
+                .setSigningKey(SECRET_TOKEN)
+                .parseClaimsJws(token)
+    }.isSuccess()
+
+    fun getUsernameFromToken(token: String): String =
+            Jwts.parser()
+                    .setSigningKey(SECRET_TOKEN)
+                    .parseClaimsJws(token)
+                    .body
+                    .subject
+
+    private fun now() = Date(System.currentTimeMillis())
+    private fun getExpirationDate() = Date(now().time + EXPIRES_IN_TEN_MINUTES)
+}
